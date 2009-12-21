@@ -1,0 +1,18 @@
+plugin.tx_gorillary_pi1.collectionView.thumbnail = IMAGE
+plugin.tx_gorillary_pi1.collectionView.wrap = <ul class="tx_gorillary_collection">|</ul>
+plugin.tx_gorillary_pi1.collectionView.thumbnail{
+  file.import = uploads/tx_gorillary/
+  file.import.field = image
+  file.width = 90c
+  file.height = 90
+  wrap = <li>|</li>
+
+}
+plugin.tx_gorillary_pi1.collectionView.thumbnail{
+  imageLinkWrap = 1
+  imageLinkWrap.enable = 1
+  imageLinkWrap.typolink.parameter.data = TSFE:id
+  imageLinkWrap.typolink.additionalParams.dataWrap = &tx_gorillary_pi1[image]={field:uid}
+ 
+}
+
