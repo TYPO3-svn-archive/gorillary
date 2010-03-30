@@ -1,0 +1,13 @@
+# sets a direct linkwrap for the image. can be used e.g. for lightboxing
+plugin.tx_gorillary_pi1.collectionView.thumbnail{
+    imageLinkWrap >
+    stdWrap.dataWrap = <a class="lightbox" rel="lightbox" href="{register:img}">|</a>
+
+    1=LOAD_REGISTER
+    1.img.cObject = IMG_RESOURCE
+    1.img.cObject{
+      file.import = uploads/tx_gorillary/
+      file.import.field = image
+      file.maxH = 800
+    }
+}

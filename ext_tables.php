@@ -55,7 +55,8 @@ t3lib_extMgm::addPlugin(array(
 ),'list_type');
 
 
-t3lib_extMgm::addStaticFile($_EXTKEY,'pi1/static/','Gorillary Gallery');
 
-t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillery_gallery_default_configuration/', 'Gorillery gallery default configuration');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_gallery_default_configuration/', 'Gorillary gallery default configuration');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_gallery_jquery/', 'Gorillary gallery jquery ajaxification');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_direct_link_to_image/', 'Gorillary gallery direct image link');
 ?>

@@ -76,17 +76,19 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		//$js = "$('.tx_gorillary_image').append('<div class=\"tx_gorillary_overlay\" style=\"position:absolute;\">sdfasd</div>');";
 		//$this->tsfe->setJS($this->extKey,$js);
 
-		$this->tsfe->additionalHeaderData[$this->prefixId] = '<script type="text/javascript" src="typo3conf/ext/gorillary/js/jquery-1.3.2.min.js"></script>';
-		$this->tsfe->additionalHeaderData[$this->prefixId].= '<script type="text/javascript" src="typo3conf/ext/gorillary/js/gorillary.js"></script>';
-		$this->tsfe->additionalHeaderData[$this->prefixId].= '<link rel="stylesheet" type="text/css" href="typo3conf/ext/gorillary/css/gorillary.css" />';
 		$content = "";
 		$display = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'what_to_display');
 
 		$collectionUids = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'collections');
-		//if(!$collectionUids)
-		//	return "You have to select collections for displaying!";
+	
 		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "deleted=0 AND hidden=0 AND uid IN ($collectionUids)");
 
+		if(!$this->conf['collectionView.'])
+            return $this->pi_wrapInBaseClass("please include the template \"Gorillery gallery default configuration\" in your typoscript root template!");
+
+        foreach($this->conf['additionalHeaderData.'] as $value){
+            $this->tsfe->additionalHeaderData[$this->prefixId] .= $value;
+        }
 		
 
 		if($display == 'singleView'){
@@ -106,14 +108,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 				$content = "no collections found!";
 			}
 		}
-		/*
-		$pages = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'pages');
-		if(!$pages){
-			$pages = $this->tsfe->id;
-		}
-		$recursive = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'recursive');
-		$pages = $this->pi_getPidList($pages, $recursive);
-		*/
+		
 		
 		return $this->pi_wrapInBaseClass($content);
 	}
@@ -122,12 +117,13 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		$content = "";
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
 		$images = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', 'deleted=0 AND hidden=0 AND collection='.$collection['uid']);
-		foreach($images as $image){
+		
+        foreach($images as $image){
 			$cObj->start($image);
 			$content .= $cObj->cObjGetSingle($this->conf['collectionView.']['thumbnail'], $this->conf['collectionView.']['thumbnail.']);
 		}
 		$content = str_replace('|', $content, $this->conf['collectionView.']['wrap']);
-		return "|$content|";
+		return $content;
 	}
 
 	private function getSingleView($collection){
