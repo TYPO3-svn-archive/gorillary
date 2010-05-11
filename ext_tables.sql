@@ -21,7 +21,28 @@ CREATE TABLE tx_gorillary_collections (
 	KEY parent (pid)
 );
 
+#
+# Table structure for table 'tx_gorillary_feedimports'
+#
+CREATE TABLE tx_gorillary_feedimports (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	sys_language_uid int(11) DEFAULT '0' NOT NULL,
+	l10n_parent int(11) DEFAULT '0' NOT NULL,
+	l10n_diffsource mediumtext,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	title tinytext,
+    image text,
+	feed_url text,
+	image_records blob NOT NULL,
 
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
 
 #
 # Table structure for table 'tx_gorillary_images'

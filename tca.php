@@ -1,6 +1,124 @@
 <?php
 if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
+
+$TCA['tx_gorillary_feedimports'] = array (
+	'ctrl' => $TCA['tx_gorillary_feedimports']['ctrl'],
+	'interface' => array (
+		'showRecordFieldList' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,title,images'
+	),
+	'feInterface' => $TCA['tx_gorillary_feedimports']['feInterface'],
+	'columns' => array (
+		'sys_language_uid' => array (
+			'exclude' => 1,
+			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.language',
+			'config' => array (
+				'type'                => 'select',
+				'foreign_table'       => 'sys_language',
+				'foreign_table_where' => 'ORDER BY sys_language.title',
+				'items' => array(
+					array('LLL:EXT:lang/locallang_general.xml:LGL.allLanguages', -1),
+					array('LLL:EXT:lang/locallang_general.xml:LGL.default_value', 0)
+				)
+			)
+		),
+		'l10n_parent' => array (
+			'displayCond' => 'FIELD:sys_language_uid:>:0',
+			'exclude'     => 1,
+			'label'       => 'LLL:EXT:lang/locallang_general.xml:LGL.l18n_parent',
+			'config'      => array (
+				'type'  => 'select',
+				'items' => array (
+					array('', 0),
+				),
+				'foreign_table'       => 'tx_gorillary_collections',
+				'foreign_table_where' => 'AND tx_gorillary_collections.pid=###CURRENT_PID### AND tx_gorillary_collections.sys_language_uid IN (-1,0)',
+			)
+		),
+		'l10n_diffsource' => array (
+			'config' => array (
+				'type' => 'passthrough'
+			)
+		),
+		'hidden' => array (
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		'title' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_collections.title',
+			'config' => array (
+				'type' => 'input',
+				'size' => '30',
+				'eval' => 'required',
+			)
+		),
+		'image' => Array (
+			'exclude' => 1,
+			'l10n_mode' => $l10n_mode_image,
+			'label' => 'LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_collections.image',
+			'config' => Array (
+				'type' => 'group',
+				'internal_type' => 'file',
+				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
+				'max_size' => '10000',
+				'uploadfolder' => 'uploads/tx_gorillary',
+				'show_thumbs' => '1',
+				'size' => 1,
+				'autoSizeMax' => 15,
+				'maxitems' => '1',
+				'minitems' => '0'
+			)
+		),
+        'feed_url' => Array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_collections.title',
+			'config' => array (
+				'type' => 'input',
+				'size' => '30',
+				'eval' => 'required',
+			)
+		),
+        'image_records' => Array (
+			'exclude' => 1,
+			'label' => "LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_collections.images",
+			'config' => Array (
+				'type' => "inline",
+				'foreign_table' => 'tx_gorillary_images',
+				'maxitems' => 500,
+				'appearance' => array(
+					'showSynchronizationLink' => 1,
+					'showAllLocalizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showRemovedLocalizationRecords' => 1,
+					'enabledControls' => array(
+						'new' => 0,
+						'delete' => 0,
+						'sort' => 0,
+						'hide' => 0,
+						'dragdrop' => 0,
+					),
+					'levelLinksPosition' => 'none',
+				),
+				'behaviour' => array(
+					'localizationMode' => 'select',
+				),
+			)
+		),
+	),
+	'types' => array (
+		'0' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, title;;;;2-2-2, image, images, image_records;;;;3-3-3')
+	),
+	'palettes' => array (
+		'1' => array('showitem' => '')
+	)
+);
+
+
 $TCA['tx_gorillary_collections'] = array (
 	'ctrl' => $TCA['tx_gorillary_collections']['ctrl'],
 	'interface' => array (

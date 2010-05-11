@@ -7,7 +7,9 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="tx_gorillary_collection_selection">Display media collections</label>
-			<label index="tx_gorillary_collections">Media collection</label>
+			<label index="tx_gorillary_feedimports">Media feed import</label>
+            <label index="tx_gorillary_feedimports.url">Media feed URL</label>
+            <label index="tx_gorillary_collections">Media collection</label>
 			<label index="tx_gorillary_collections.title">Title</label>
 			<label index="tx_gorillary_collections.images">Images</label>
 			<label index="tx_gorillary_collections.image">Overview image</label>
@@ -16,11 +18,14 @@
 			<label index="tx_gorillary_images.additional_files">Additional files</label>
 			<label index="tx_gorillary_images.description">Description</label>
 			<label index="tx_gorillary_images.image">Image</label>
+
 			<label index="tt_content.list_type_pi1">Gorillary Gallery</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tx_gorillary_collection_selection">Media Collections anzeigen</label>
-			<label index="tx_gorillary_collections">Media collection</label>
+			<label index="tx_gorillary_feedimports">Media feed import</label>
+            <label index="tx_gorillary_feedimports.url">Media feed URL</label>
+            <label index="tx_gorillary_collections">Media collection</label>
 			<label index="tx_gorillary_collections.title">Titel</label>
 			<label index="tx_gorillary_collections.images">Bilder</label>
 			<label index="tx_gorillary_collections.image">Media Collection Bild</label>
