@@ -16,7 +16,7 @@ $EM_CONF[$_EXTKEY] = array(
 You can select files an add meta info to each file. Additionally you can create categories.',
 	'category' => 'fe',
 	'author' => 'Stephan Petzl',
-	'author_email' => 'office@netrabbit.at',
+	'author_email' => 'stephan.petzl@ajado.com',
 	'shy' => '',
 	'dependencies' => '',
 	'conflicts' => '',

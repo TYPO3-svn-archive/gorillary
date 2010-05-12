@@ -13,5 +13,6 @@ plugin.tx_gorillary_pi1.collectionView.thumbnail{
 
     10 < temp.gorillaryThumbnail
     10.imageLinkWrap >
-    10.stdWrap.dataWrap = <a class="lightbox" rel="lightbox" href="{register:img}">|</a>    
+    10.wrap >
+    10.stdWrap.dataWrap = <li><a class="lightbox" rel="lightbox" href="{register:img}">|</a></li>
 }

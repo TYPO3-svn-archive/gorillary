@@ -1,9 +1,6 @@
 var gorillary = {};
 
-
 gorillary.init = function(){
-
-	
 	$('.tx_gorillary_image').css('position', 'relative');
 	$('.tx_gorillary_overlay').hide();
 	

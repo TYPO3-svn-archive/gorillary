@@ -1,6 +1,10 @@
 <?php
 if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
+t3lib_extMgm::allowTableOnStandardPages("tx_gorillary_content_mm");
+
+
+
 
 $TCA['tx_gorillary_feedimports'] = array (
 	'ctrl' => $TCA['tx_gorillary_feedimports']['ctrl'],
@@ -122,7 +126,7 @@ $TCA['tx_gorillary_feedimports'] = array (
 $TCA['tx_gorillary_collections'] = array (
 	'ctrl' => $TCA['tx_gorillary_collections']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,title,images'
+		'showRecordFieldList' => 'sys_language_uid,l10n_parent,l10n_diffsource,parentid,parenttable,title,images'
 	),
 	'feInterface' => $TCA['tx_gorillary_collections']['feInterface'],
 	'columns' => array (
@@ -155,6 +159,16 @@ $TCA['tx_gorillary_collections'] = array (
 		'l10n_diffsource' => array (		
 			'config' => array (
 				'type' => 'passthrough'
+			)
+		),
+        "parentid" => Array (
+			"config" => Array (
+				"type" => "passthrough",
+			)
+		),
+		"parenttable" => Array (
+			"config" => Array (
+				"type" => "passthrough",
 			)
 		),
 		'hidden' => array (		
@@ -210,7 +224,7 @@ $TCA['tx_gorillary_collections'] = array (
 		),
         'image_records' => Array (
 			'exclude' => 1,
-			'label' => "LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_collections.images",
+			'label' => "LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_collections.images_meta",
 			'config' => Array (
 				'type' => "inline",
 				'foreign_table' => 'tx_gorillary_images',
@@ -236,7 +250,7 @@ $TCA['tx_gorillary_collections'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, title;;;;2-2-2, image, images, image_records;;;;3-3-3')
+		'0' => array('showitem' => 'title;;;;2-2-2, parentid, parenttable, image, images, image_records;;;;3-3-3')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
@@ -318,6 +332,27 @@ $TCA['tx_gorillary_images'] = array (
 				'rows' => '5',
 			)
 		),
+        'link' => array (
+            'exclude' => 0,
+            'label' => 'LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_images.link',
+            'config' => array (
+                'type'     => 'input',
+                'size'     => '15',
+                'max'      => '255',
+                'checkbox' => '',
+                'eval'     => 'trim',
+                'wizards'  => array(
+                    '_PADDING' => 2,
+                    'link'     => array(
+                        'type'         => 'popup',
+                        'title'        => 'Link',
+                        'icon'         => 'link_popup.gif',
+                        'script'       => 'browse_links.php?mode=wizard',
+                        'JSopenParams' => 'height=300,width=500,status=0,menubar=0,scrollbars=1'
+                    )
+                )
+            )
+        ),
 		'additional_files' => array(
 			'exclude' => 1,
 			'l10n_mode' => $l10n_mode_image,
@@ -339,7 +374,7 @@ $TCA['tx_gorillary_images'] = array (
 		
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, description;;;;3-3-3, additional_files')
+		'0' => array('showitem' => 'title;;;;2-2-2, link, description;;;;3-3-3, additional_files')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')

@@ -6,6 +6,7 @@ plugin.tx_gorillary_pi1.collectionView.thumbnail{
   file.import.field = image
   file.width = 90c
   file.height = 90
+  altText.field = title
   wrap = <li>|</li>
   imageLinkWrap = 1
   imageLinkWrap.enable = 1

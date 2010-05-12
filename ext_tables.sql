@@ -1,4 +1,13 @@
 #
+# Table structure for table 'tt_content'
+#
+CREATE TABLE tt_content (
+	tx_gorillary_imagesource blob NOT NULL,
+);
+
+
+
+#
 # Table structure for table 'tx_gorillary_collections'
 #
 CREATE TABLE tx_gorillary_collections (
@@ -10,13 +19,15 @@ CREATE TABLE tx_gorillary_collections (
 	sys_language_uid int(11) DEFAULT '0' NOT NULL,
 	l10n_parent int(11) DEFAULT '0' NOT NULL,
 	l10n_diffsource mediumtext,
+    sorting int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	title tinytext,
 	image text,
 	images blob NOT NULL,
 	image_records blob NOT NULL,
-
+    parentid int(11) DEFAULT '0' NOT NULL,
+	parenttable tinytext NOT NULL,
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
@@ -61,6 +72,7 @@ CREATE TABLE tx_gorillary_images (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	title tinytext,
 	description text,
+    link tinytext,
 	image text,
 	additional_files blob NOT NULL,
 	collection int(11) DEFAULT '0' NOT NULL,
