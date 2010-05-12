@@ -48,9 +48,11 @@ CREATE TABLE tx_gorillary_feedimports (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	title tinytext,
     image text,
+    images blob NOT NULL,
 	feed_url text,
 	image_records blob NOT NULL,
-
+    parentid int(11) DEFAULT '0' NOT NULL,
+	parenttable tinytext NOT NULL,
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
@@ -76,6 +78,7 @@ CREATE TABLE tx_gorillary_images (
 	image text,
 	additional_files blob NOT NULL,
 	collection int(11) DEFAULT '0' NOT NULL,
+    feedimport int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)

@@ -80,7 +80,7 @@ $TCA['tx_gorillary_feedimports'] = array (
 		),
         'feed_url' => Array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_collections.title',
+			'label' => 'feed_url',
 			'config' => array (
 				'type' => 'input',
 				'size' => '30',
@@ -115,7 +115,7 @@ $TCA['tx_gorillary_feedimports'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, title;;;;2-2-2, image, images, image_records;;;;3-3-3')
+		'0' => array('showitem' => 'title;;;;2-2-2, feed_url, images, image_records;;;;3-3-3')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')

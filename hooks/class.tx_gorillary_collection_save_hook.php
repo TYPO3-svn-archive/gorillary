@@ -75,21 +75,21 @@ class tx_gorillary_collection_save_hook{
 		
 		$fileNames = explode(',', $this->collection['images']);
 		
-		foreach($fileNames as $imageName){
+		foreach($fileNames as $fileName){
 				
-			if(trim($imageName) && !isset($this->images[$imageName])){
+			if(trim($fileName) && !isset($this->images[$fileName])){
 				
 				$newRecord = array(
 					'pid' => $this->collection['pid'],
 					'collection' => $this->collection['uid'],
 					'crdate' => time(),
 					'cruser_id' => $this->collection['cruser_id'],
-					'image' => $imageName,
-					'title' => $this->getTitleFromName($imageName)
+					'image' => $fileName,
+					'title' => $this->getTitleFromName($fileName)
 				);
 				$this->db->exec_INSERTquery('tx_gorillary_images', $newRecord);
 				$newRecord['uid'] = $this->db->sql_insert_id();
-				$this->images[$imageName] = $newRecord;
+				$this->images[$fileName] = $newRecord;
 			}
 		}
 		

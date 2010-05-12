@@ -1,6 +1,6 @@
 <?php
 /**
- * creates (or deletes) a record for each image which is selected in the select box of the collection record
+ * creates (or deletes) a record for each image which is selected in the select box of the feedimport record
  * gets triggered when hitting the save button in the backend 
  */
 class tx_gorillary_feedimport_save_hook{
@@ -9,11 +9,12 @@ class tx_gorillary_feedimport_save_hook{
 	 * @var t3lib_DB
 	 */
 	private $db;
-	private $collection;
+	private $feedImport;
 	private $images;
 
 
-    function tx_gorillary_collection_save_hook(){
+
+    function tx_gorillary_feedimport_save_hook(){
     
     }
     
@@ -26,40 +27,38 @@ class tx_gorillary_feedimport_save_hook{
 			switch($status){
 				case "new":
 					// we have to retrieve the real uid from the database
-					$collectionUid = $ref->substNEWwithIDs[$id];
+					$feedImportUid = $ref->substNEWwithIDs[$id];
 					break;
 				case "update":
-					$collectionUid = $id;
+					$feedImportUid = $id;
 					break;
 			}
 			
-			$rows = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "uid='$collectionUid' AND deleted=0");
-			$this->collection = $rows[0];
-			$this->images = $this->getImageRecordsOfCollection($this->collection);
+			$rows = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_feedimports', "uid='$feedImportUid' AND deleted=0");
+			$this->feedImport = $rows[0];
+			$this->images = $this->getImageRecordsOfFeedImport($this->feedImport);
 			$this->createRecords();
-			$this->updateCollectionRecord();
-			$this->deleteCheck = true;
+			$this->updateFeedImportRecord();
+			
 		}
 	}
 	
 	function processDatamap_afterAllOperations(&$ref){
-		if($this->deleteCheck){
-			$this->deleteRecords();
-		}
+		
 	}
 	
     function processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $ref){
-		if($table == "tx_gorillary_collections"){
+		if($table == "tx_gorillary_feedimport"){
 			
 		}
     }
     function processDatamap_preProcessFieldArray($fieldArray, $table, $id, $ref){
-		if($table == "tx_gorillary_collections"){
+		if($table == "tx_gorillary_feedimport"){
 			
 		}
     }
-	private function getImageRecordsOfCollection($collection){
-		$imageRows = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', "deleted=0 AND collection='".$collection['uid']."' AND pid='".$collection['pid']."'");
+	private function getImageRecordsOfFeedImport($feedImport){
+		$imageRows = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', "deleted=0 AND feedimport='".$feedImport['uid']."' AND pid='".$feedImport['pid']."'");
 		
 		$imgArray = array();
 		foreach($imageRows as $imgRow){
@@ -72,82 +71,79 @@ class tx_gorillary_feedimport_save_hook{
 	 * creates an image record for each image which was selected in the select-box
 	 */	 	
 	private function createRecords(){
-		
-		$fileNames = explode(',', $this->collection['images']);
-		
-		foreach($fileNames as $imageName){
-				
-			if(trim($imageName) && !isset($this->images[$imageName])){
-				
-				$newRecord = array(
-					'pid' => $this->collection['pid'],
-					'collection' => $this->collection['uid'],
-					'crdate' => time(),
-					'cruser_id' => $this->collection['cruser_id'],
-					'image' => $imageName,
-					'title' => $this->getTitleFromName($imageName)
-				);
-				$this->db->exec_INSERTquery('tx_gorillary_images', $newRecord);
-				$newRecord['uid'] = $this->db->sql_insert_id();
-				$this->images[$imageName] = $newRecord;
-			}
-		}
-		
+
+        $url = $this->feedImport['feed_url'];        
+		// TODO: import image from media feed
+        //$fileNames = explode(',', );
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        $data = curl_exec($ch);
+        curl_close($ch);
+		$xml = new SimpleXMLElement($data, LIBXML_NOCDATA);
+        
+        foreach($xml->channel[0]->item as $item){
+            $mediaProperties = $item->children('http://search.yahoo.com/mrss/');
+            $imageUrl = $mediaProperties->attributes()->url;
+            $imageTitle = $mediaProperties->attributes()->title;
+            $fileName = $this->getFilenameFromUrl($imageUrl);
+
+            if(trim($fileName) && !isset($this->images[$fileName])){
+                $filepath = PATH_site.'uploads/tx_gorillary/'.$fileName;
+                $this->downloadFile($imageUrl,$filepath);
+
+                $newRecord = array(
+                    'pid' => $this->feedImport['pid'],
+                    'feedimport' => $this->feedImport['uid'],
+                    'crdate' => time(),
+                    'cruser_id' => $this->feedImport['cruser_id'],
+                    'image' => $fileName,
+                    'title' => trim($item->title),
+                    'description' => trim($item->description),
+                    'link' => $item->link
+                );
+                $this->db->exec_INSERTquery('tx_gorillary_images', $newRecord);
+                $newRecord['uid'] = $this->db->sql_insert_id();
+                $this->images[$fileName] = $newRecord;
+            }
+        }
+        
 	}
+    
+    private function getFilenameFromUrl($imageUrl) {
+        $seg = explode("/",$imageUrl);
+        return array_pop($seg);
+    }
+    private function downloadFile($url,$filePath){
+        $ch = curl_init($url);
+        $fp = fopen($filePath, 'wb');
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+    }
+	
+	
 
 	/**
-	 * if an image was removed from the select box, this method deletes the relating 
-	 * image record from the DB
-	 */	 	 	
-	private function deleteRecords(){
-	
-		$fileNames = explode(',', $this->collection['images']);
-		// remove imagerecords which are not used anymore
-		foreach($this->images as $filename => $image){
-			if(array_search($filename, $fileNames) === false){
-		
-				$this->db->exec_DELETEquery('tx_gorillary_images', "image='$filename' AND collection='".$this->collection['uid']."'");
-				//unset ($this->images[$filename]);
-				
-			}
-		}
-	}
-	
-	/**
-	 * generates a title out of a filename (strips extension,...)
-	 */	 	
-	private function getTitleFromName($name){
-		
-		$tags = preg_replace("/[^A-Za-z ]/"," ",$name);
-		$tagArr = explode(" ",$tags);
-		$tags = array();
-		foreach($tagArr as $tag){
-			if($tag != "png" && $tag != "gif" && $tag != "jpg" && $tag != "jpeg"){
-				$tags[] = strtolower($tag);
-			}
-		}
-		return trim(implode(" ",$tags));
-	}
-
-	/**
-	 * updates the IRRE data in the collection record, so that image records are
+	 * updates the IRRE data in the feedimport record, so that image records are
 	 * displayed correctly beneith the image select box
 	 */	 	 	
-	private function updateCollectionRecord(){
+	private function updateFeedImportRecord(){
 	
-		$collectionId = $this->collection['uid'];
+		$feedImportUid = $this->feedImport['uid'];
 		$imgUids = array();
-		$fileNames = $this->collection['images'];
-		$fileNames = explode(',', $fileNames);
 		
-		foreach($fileNames as $filename){
-			$imgUids[] = $this->images[$filename]['uid'];
+		
+		foreach($this->images as $fileName => $image){
+			$imgUids[] = $image['uid'];
 		}
 		
 		$updateRecord = array('image_records' => implode(',', $imgUids),
 							'tstamp' => time());
 		
-		$this->db->exec_UPDATEquery('tx_gorillary_collections', "uid='$collectionId'", $updateRecord);
+		$this->db->exec_UPDATEquery('tx_gorillary_feedimports', "uid='$feedImportUid'", $updateRecord);
 	}
 }
 ?>
