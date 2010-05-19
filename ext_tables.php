@@ -3,6 +3,12 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
+t3lib_extMgm::addPlugin(array(
+    'Gorillary Gallery',
+    $_EXTKEY . '_pi1',
+    t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif'
+),'CType');
+
 
 t3lib_extMgm::allowTableOnStandardPages("tx_gorillary_feedimports");
 
