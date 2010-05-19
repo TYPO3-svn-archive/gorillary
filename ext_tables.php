@@ -7,7 +7,7 @@ t3lib_extMgm::addPlugin(array(
     'Gorillary Gallery',
     $_EXTKEY . '_pi1',
     t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif'
-),'CType');
+),'list_type');
 
 
 t3lib_extMgm::allowTableOnStandardPages("tx_gorillary_feedimports");
@@ -105,25 +105,10 @@ t3lib_extMgm::addTCAcolumns('tt_content', $tempColumns, 1);
 t3lib_div::loadTCA('tt_content');
 //t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi1', 'FILE:EXT:'.$_EXTKEY.'/flexform_ds.xml');
 
-t3lib_extMgm::addToAllTCAtypes('tt_content','tx_gorillary_imagesource','','');
 
-/*
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1']='layout,select_key,pages,recursive';
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1']='tx_gorillary_imagesource';
 
-t3lib_extMgm::addPlugin(array(
-	'LLL:EXT:gorillary/locallang_db.xml:tt_content.list_type_pi1',
-	$_EXTKEY . '_pi1',
-	t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif'
-),'list_type');
-*/
-
-$TCA['tt_content']['columns']['CType']['config']['items'][] = array (
-			'0' => 'Gorillary Gallery',
-			'1' => 'gorillary',
-            '2' => t3lib_extMgm::extRelPath($_EXTKEY).'images/face-monkey.png',
-		);
-$TCA['tt_content']['types'][$_EXTKEY]['showitem'] = 'CType;;4;button;,header,tx_gorillary_imagesource';
 
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_gallery_default_configuration/', 'Gorillary gallery default configuration');
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_gallery_jquery/', 'Gorillary gallery jquery ajaxification');

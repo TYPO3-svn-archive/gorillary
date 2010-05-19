@@ -13,7 +13,7 @@
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Gorillary',
 	'description' => 'Is an image gallery extension which makes use of TYPO3\'s Inline Relational Record Editing feature.
-You can select files an add meta info to each file. Additionally you can create categories.',
+You can select files an add meta info to each file. You can create galleries on pages, each of them having several media collections, which themself consist of several images with meta data.',
 	'category' => 'fe',
 	'author' => 'Stephan Petzl',
 	'author_email' => 'stephan.petzl@ajado.com',
