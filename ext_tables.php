@@ -90,6 +90,13 @@ $tempColumns = array (
 					'showAllLocalizationLink' => 1,
 					'showPossibleLocalizationRecords' => 1,
 					'showRemovedLocalizationRecords' => 1,
+					'enabledControls' => array(
+						'new' => 1,
+						'delete' => 1,
+						'sort' => 1,
+						'hide' => 1,
+						'dragdrop' => 1,
+					),
 				),
 				'behaviour' => array(
 					'localizationMode' => 'select',

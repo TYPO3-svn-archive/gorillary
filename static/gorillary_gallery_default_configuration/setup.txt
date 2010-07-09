@@ -1,5 +1,23 @@
-plugin.tx_gorillary_pi1.collectionView.wrap = <ul class="tx_gorillary_collection">|</ul>
+# one gallery has several collections
+# one collection has several images
 
+plugin.tx_gorillary_pi1.galleryView.wrap = <ul class="tx_gorillary_gallery">|</ul>
+plugin.tx_gorillary_pi1.galleryView.thumbnail = IMAGE
+plugin.tx_gorillary_pi1.galleryView.thumbnail{
+  file.import = uploads/tx_gorillary/
+  file.import.field = image
+  file.width = 90c
+  file.height = 90
+  altText.field = title
+  wrap = <li>|</li>
+  imageLinkWrap = 1
+  imageLinkWrap.enable = 1
+  imageLinkWrap.typolink.parameter.data = TSFE:id
+  imageLinkWrap.typolink.additionalParams.dataWrap = &tx_gorillary_pi1[collection]={field:uid}
+  imageLinkWrap.typolink.useCacheHash = 1
+}
+
+plugin.tx_gorillary_pi1.collectionView.wrap = <ul class="tx_gorillary_collection">|</ul>
 plugin.tx_gorillary_pi1.collectionView.thumbnail = IMAGE
 plugin.tx_gorillary_pi1.collectionView.thumbnail{
   file.import = uploads/tx_gorillary/
@@ -14,6 +32,21 @@ plugin.tx_gorillary_pi1.collectionView.thumbnail{
   imageLinkWrap.typolink.additionalParams.dataWrap = &tx_gorillary_pi1[image]={field:uid}
   imageLinkWrap.typolink.useCacheHash = 1
 }
+
+
+plugin.tx_gorillary_pi1.singleView.wrap = <div class="tx_gorillary_image">|</ul>
+plugin.tx_gorillary_pi1.singleView.thumbnail = IMAGE
+plugin.tx_gorillary_pi1.singleView.thumbnail{
+  file.import = uploads/tx_gorillary/
+  file.import.field = image
+  file.width = 400
+  altText.field = title
+  imageLinkWrap = 1
+  imageLinkWrap.enable = 1
+  imageLinkWrap.typolink.parameter.data = TSFE:lastImageInfo|origFile 
+}
+
+
 
 plugin.tx_gorillary_pi1.additionalHeaderData{
 	5 = <link rel="stylesheet" type="text/css" href="typo3conf/ext/gorillary/css/gorillary.css" />

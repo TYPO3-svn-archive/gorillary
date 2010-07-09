@@ -20,11 +20,14 @@ class tx_gorillary_tceformsInlineHook implements t3lib_tceformsInlineHook{
 	 */
 					
 	public function renderForeignRecordHeaderControl_preProcess($parentUid, $foreign_table, array $rec, array $config, $isVirtual, array &$enabledControls){
-		$enabledControls['new'] = 0;
-		$enabledControls['delete'] = 0;
-		$enabledControls['dragdrop'] = 0;
-		$enabledControls['sort'] = 0;
-		$enabledControls['hide'] = 0;
+		
+		if($foreign_table == 'tx_gorillary_images'){
+			$enabledControls['new'] = 0;
+			$enabledControls['delete'] = 0;
+			$enabledControls['dragdrop'] = 0;
+			$enabledControls['sort'] = 0;
+			$enabledControls['hide'] = 0;
+		}
 	}
 
 	/**

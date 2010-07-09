@@ -75,78 +75,107 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_initPIflexForm();
 		$this->conf = $conf;
-		//$js = "$('.tx_gorillary_image').append('<div class=\"tx_gorillary_overlay\" style=\"position:absolute;\">sdfasd</div>');";
-		//$this->tsfe->setJS($this->extKey,$js);
-
+		
 		$content = "";
-		//$display = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'what_to_display');
+
+		// we have to retrieve the original uid, in case this is a localized tt_content record
 		if(isset($this->cObj->data['_LOCALIZED_UID'])){
 			$contentId = $this->cObj->data['_LOCALIZED_UID'];
 		}else{
 			$contentId = $this->cObj->data['uid'];
 		}
-		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "parentid=" . $contentId . " AND parenttable='tt_content' AND deleted=0 AND hidden=0");
-		
-		
+
+		// check whether the default typoscript themplate was included
 		if (!$this->conf['collectionView.']){
 		    return $this->pi_wrapInBaseClass("please include the template \"Gorillery gallery default configuration\" in your typoscript root template!");
 		}
-		
+
+		// include the additional files into the header (e.g. some js files)
 		foreach ($this->conf['additionalHeaderData.'] as $value) {
 		    $this->tsfe->additionalHeaderData[$this->prefixId] .= $value;
 		}
 
-
-		if (count($collections) > 1) { //listview
-			foreach ($collections as $gallery) {
-			    // TODO: $this->getGalleryView($collections);
-			}
-		} else if (count($collections)==1) { //singleview
-
-			$content .= $this->getCollectionView($collections[0]);
-		} else {
-			$content = "no collections found!";
+		// check whether we have GET params here
+		$imageId = intval($this->piVars['image']);
+		$collectionId = intval($this->piVars['collection']);
+		if($imageId){	// load image single view
+			$content = $this->getSingleView($imageId);
+		}else if($collectionId){ // load collection single view
+			$content = $this->getCollectionView($collectionId);
+		}else{ // load collection overview
+			$content = $this->getGalleryView($contentId);
 		}
-
-
 		return $this->pi_wrapInBaseClass($content);
 	}
 
-	private function getCollectionView($collection) {
+	private function getGalleryView($contentId) {
 		$content = "";
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
-		$images = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', 'deleted=0 AND hidden=0 AND collection=' . $collection['uid']);
+		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "parentid=" . $contentId . " AND parenttable='tt_content' AND deleted=0 AND hidden=0");
 
-		foreach ($images as $image) {
-			$cObj->start($image);
-			$content .= $cObj->cObjGetSingle($this->conf['collectionView.']['thumbnail'], $this->conf['collectionView.']['thumbnail.']);
+		if (count($collections)) {
+			$cObj = t3lib_div::makeInstance('tslib_cObj');
+			
+			foreach ($collections as $collection) {
+				$cObj->start($collection);
+				$content .= $cObj->cObjGetSingle($this->conf['galleryView.']['thumbnail'], $this->conf['galleryView.']['thumbnail.']);
+			}
+			$content = str_replace('|', $content, $this->conf['galleryView.']['wrap']);
+
+		} else {
+			$content = "no collections found!";
 		}
-		$content = str_replace('|', $content, $this->conf['collectionView.']['wrap']);
 		return $content;
 	}
 
-	private function getSingleView($collection) {
-		$imageUid = intval($this->piVars['image']);
+	private function getCollectionView($collectionId) {
+		$content = "";
+		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "uid=" . $collectionId . " AND parenttable='tt_content' AND deleted=0 AND hidden=0");
+
+		if (count($collections)) {
+			$cObj = t3lib_div::makeInstance('tslib_cObj');
+			$images = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', 'deleted=0 AND hidden=0 AND collection=' . $collectionId);
+
+			foreach ($images as $image) {
+				$cObj->start($image);
+				$content .= $cObj->cObjGetSingle($this->conf['collectionView.']['thumbnail'], $this->conf['collectionView.']['thumbnail.']);
+			}
+			$content = str_replace('|', $content, $this->conf['collectionView.']['wrap']);
+
+		} else {
+			$content = "no collections found!";
+		}
+		return $content;
+	}
+
+	/**
+	 * render a single image.
+	 * load the given image, if not found take the first image of the given media collection
+	 * and render it
+	 * @param int $imageid
+	 * @param int $collectionId
+	 * @return string the content
+	 */
+	private function getSingleView($imageId = null) {
+		
 		$content = "";
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
-		if ($imageUid) {
-			$images = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', 'deleted=0 AND hidden=0 AND uid=' . $imageUid);
-		} else { // take the first image from the page
-			$images = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', 'deleted=0 AND hidden=0 AND collection=' . $collection['uid']);
+		if ($imageId) {
+			$images = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', 'deleted=0 AND hidden=0 AND uid=' . $imageId);
 		}
+		
 		if (count($images) > 0) {
 			$image = $images[0];
 			$cObj->start($image);
-			$content .= $cObj->cObjGetSingle($this->conf['singleView.']['image'], $this->conf['singleView.']['image.']);
+			$content .= $cObj->cObjGetSingle($this->conf['singleView.']['thumbnail'], $this->conf['singleView.']['thumbnail.']);
 		} else {
 			$content .= "no such image found!";
 		}
 
 
 		$content = str_replace('|', $content, $this->conf['singleView.']['wrap']);
-		$content .= '<div class="tx_gorillary_overlay"></div>';
-		$content .= '<div class="tx_gorillary_loader_container"><div class="tx_gorillary_loader"></div></div>';
-		$content = '<div style="position: relative;">' . $content . '</div>';
+		//$content .= '<div class="tx_gorillary_overlay"></div>';
+		//$content .= '<div class="tx_gorillary_loader_container"><div class="tx_gorillary_loader"></div></div>';
+		//$content = '<div style="position: relative;">' . $content . '</div>';
 		return $content;
 	}
 
