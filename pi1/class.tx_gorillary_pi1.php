@@ -85,9 +85,9 @@ class tx_gorillary_pi1 extends tslib_pibase {
 			$contentId = $this->cObj->data['uid'];
 		}
 
-		// check whether the default typoscript themplate was included
+		// check whether the default typoscript template was included
 		if (!$this->conf['collectionView.']){
-		    return $this->pi_wrapInBaseClass("please include the template \"Gorillery gallery default configuration\" in your typoscript root template!");
+		    return $this->pi_wrapInBaseClass("please include the template \"Gorillary gallery default configuration\" in your typoscript root template!");
 		}
 
 		// include the additional files into the header (e.g. some js files)
@@ -132,6 +132,9 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "uid=" . $collectionId . " AND parenttable='tt_content' AND deleted=0 AND hidden=0");
 
 		if (count($collections)) {
+			$cObjCollection = t3lib_div::makeInstance('tslib_cObj');
+			$cObjCollection->start($collections[0]);
+			
 			$cObj = t3lib_div::makeInstance('tslib_cObj');
 			$images = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', 'deleted=0 AND hidden=0 AND collection=' . $collectionId);
 
@@ -139,7 +142,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 				$cObj->start($image);
 				$content .= $cObj->cObjGetSingle($this->conf['collectionView.']['thumbnail'], $this->conf['collectionView.']['thumbnail.']);
 			}
-			$content = str_replace('|', $content, $this->conf['collectionView.']['wrap']);
+			$content = $cObjCollection->stdWrap($content, $this->conf['collectionView.']);
 
 		} else {
 			$content = "no collections found!";
