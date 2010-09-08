@@ -3,7 +3,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 t3lib_extMgm::allowTableOnStandardPages("tx_gorillary_content_mm");
 
-
+require_once t3lib_extMgm::extPath('gorillary').'lib/class.user_imagefield.php';
 
 
 $TCA['tx_gorillary_feedimports'] = array (
@@ -318,9 +318,11 @@ $TCA['tx_gorillary_images'] = array (
 			'exclude' => 0,		
 			'label' => 'LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_images.title',		
 			'config' => array (
-				'type' => 'input',	
+				/*'type' => 'input',
 				'size' => '30',	
-				'eval' => 'required',
+				'eval' => 'required',*/
+				'type' => 'user',
+				'userFunc' => 'user_imagefield->getHtml'
 			)
 		),
 		'description' => array (		

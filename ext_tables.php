@@ -9,6 +9,11 @@ t3lib_extMgm::addPlugin(array(
     t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif'
 ),'list_type');
 
+t3lib_extMgm::addPlugin(array(
+    'Gorillary Media Feed Gallery',
+    $_EXTKEY . '_pi2',
+    t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif'
+),'list_type');
 
 t3lib_extMgm::allowTableOnStandardPages("tx_gorillary_feedimports");
 
@@ -104,6 +109,33 @@ $tempColumns = array (
 				),
 			)
 		),
+	"tx_gorillary_feedimports" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_feedimports",
+			"config" => Array (
+				"type" => "inline",
+				"foreign_table" => "tx_gorillary_feedimports",
+				"foreign_field" => "parentid",
+				"foreign_table_field" => "parenttable",
+				"maxitems" => 10,
+				'appearance' => array(
+					'showSynchronizationLink' => 1,
+					'showAllLocalizationLink' => 1,
+					'showPossibleLocalizationRecords' => 1,
+					'showRemovedLocalizationRecords' => 1,
+					'enabledControls' => array(
+						'new' => 1,
+						'delete' => 1,
+						'sort' => 1,
+						'hide' => 1,
+						'dragdrop' => 1,
+					),
+				),
+				'behaviour' => array(
+					'localizationMode' => 'select',
+				),
+			)
+		),
 );
 
 
@@ -117,8 +149,17 @@ t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1']='layout,select_key,pages,recursive';
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1']='tx_gorillary_imagesource';
 
+$TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi2']='layout,select_key,pages,recursive';
+$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi2']='tx_gorillary_feedimports';
+
 
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_gallery_default_configuration/', 'Gorillary gallery default configuration');
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_gallery_jquery/', 'Gorillary gallery jquery ajaxification');
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_direct_link_to_image/', 'Gorillary gallery direct image link');
+
+if (TYPO3_MODE == 'BE') {
+    $TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_gorillary_pi1_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_gorillary_pi1_wizicon.php';
+	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_gorillary_pi2_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'pi2/class.tx_gorillary_pi2_wizicon.php';
+}
+
 ?>

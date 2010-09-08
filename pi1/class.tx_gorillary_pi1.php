@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009 Stephan Petzl <office@netrabbit.at>
+ *  (c) 2010 Stephan Petzl <stephan.petzl@ajado.com>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,9 +30,9 @@
 require_once(PATH_tslib . 'class.tslib_pibase.php');
 
 /**
- * Plugin 'Gorillary Gallery' for the 'gorillary' extension.
+ * Plugin 'Gorillary Gallary' for the 'gorillary' extension.
  *
- * @author	Stephan Petzl <office@netrabbit.at>
+ * @author	Stephan Petzl <stephan.petzl@ajado.com>
  * @package	TYPO3
  * @subpackage	tx_gorillary
  */
@@ -49,18 +49,23 @@ class tx_gorillary_pi1 extends tslib_pibase {
 	 *
 	 * @var tslib_fe
 	 */
-	private $tsfe;
+	protected $tsfe;
 	/**
 	 *
 	 * @var t3lib_DB
 	 */
-	private $db;
+	protected $db;
 	/**
 	 *
 	 * @var tslib_cObj
 	 */
 	public $cObj;
 
+	/**
+	 * hooks for any additional content manipulation
+	 * @var array 
+	 */
+	protected $hookObjects;
 	/**
 	 * Main method of your PlugIn
 	 *
@@ -77,6 +82,16 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		$this->conf = $conf;
 		
 		$content = "";
+
+		$this->hookObjects = array();
+
+		// initialise hooks for any additional content manipulation
+		// TODO: make use of hook objects
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['gorillary']['contentManipulation'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['gorillary']['contentManipulation'] as $_classRef) {
+				$this->hookObjects[] = & t3lib_div::getUserObj($_classRef);
+			}
+		}
 
 		// we have to retrieve the original uid, in case this is a localized tt_content record
 		if(isset($this->cObj->data['_LOCALIZED_UID'])){
@@ -105,10 +120,17 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		}else{ // load collection overview
 			$content = $this->getGalleryView($contentId);
 		}
+
+
 		return $this->pi_wrapInBaseClass($content);
 	}
 
-	private function getGalleryView($contentId) {
+	/**
+	 * a gallery consists out of several collections
+	 * @param int $contentId
+	 * @return string
+	 */
+	protected function getGalleryView($contentId) {
 		$content = "";
 		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "parentid=" . $contentId . " AND parenttable='tt_content' AND deleted=0 AND hidden=0");
 
@@ -117,7 +139,9 @@ class tx_gorillary_pi1 extends tslib_pibase {
 			
 			foreach ($collections as $collection) {
 				$cObj->start($collection);
-				$content .= $cObj->cObjGetSingle($this->conf['galleryView.']['thumbnail'], $this->conf['galleryView.']['thumbnail.']);
+				$html = $cObj->cObjGetSingle($this->conf['galleryView.']['thumbnail'], $this->conf['galleryView.']['thumbnail.']);
+
+				$content .= $html;
 			}
 			$content = str_replace('|', $content, $this->conf['galleryView.']['wrap']);
 
@@ -127,7 +151,12 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		return $content;
 	}
 
-	private function getCollectionView($collectionId) {
+	/**
+	 * a collection consists out of several images
+	 * @param int $collectionId
+	 * @return string
+	 */
+	protected function getCollectionView($collectionId) {
 		$content = "";
 		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "uid=" . $collectionId . " AND parenttable='tt_content' AND deleted=0 AND hidden=0");
 
@@ -158,7 +187,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 	 * @param int $collectionId
 	 * @return string the content
 	 */
-	private function getSingleView($imageId = null) {
+	protected function getSingleView($imageId = null) {
 		
 		$content = "";
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
@@ -182,6 +211,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		return $content;
 	}
 
+	
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/gorillary/pi1/class.tx_gorillary_pi1.php']) {

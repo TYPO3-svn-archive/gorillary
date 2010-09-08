@@ -3,6 +3,7 @@
 #
 CREATE TABLE tt_content (
 	tx_gorillary_imagesource blob NOT NULL,
+	tx_gorillary_feedimports blob NOT NULL,
 );
 
 

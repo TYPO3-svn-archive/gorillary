@@ -81,7 +81,8 @@ class tx_gorillary_feedimport_save_hook{
         $data = curl_exec($ch);
         curl_close($ch);
 		$xml = new SimpleXMLElement($data, LIBXML_NOCDATA);
-        
+        $maxImages = 7;
+
         foreach($xml->channel[0]->item as $item){
             $mediaProperties = $item->children('http://search.yahoo.com/mrss/');
             $imageUrl = $mediaProperties->attributes()->url;
@@ -106,6 +107,10 @@ class tx_gorillary_feedimport_save_hook{
                 $newRecord['uid'] = $this->db->sql_insert_id();
                 $this->images[$fileName] = $newRecord;
             }
+			$maxImages--;
+			if($maxImages == 0){
+				break;
+			}
         }
         
 	}

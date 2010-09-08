@@ -52,3 +52,7 @@ plugin.tx_gorillary_pi1.additionalHeaderData{
 	5 = <link rel="stylesheet" type="text/css" href="typo3conf/ext/gorillary/css/gorillary.css" />
 }
 
+plugin.tx_gorillary_pi2 < plugin.tx_gorillary_pi1
+plugin.tx_gorillary_pi2.includeLibs = typo3conf/ext/gorillary/pi2/class.tx_gorillary_pi2.php
+plugin.tx_gorillary_pi2.userFunc = tx_gorillary_pi2->main
+
