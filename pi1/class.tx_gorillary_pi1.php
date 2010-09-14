@@ -101,7 +101,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		}
 
 		// check whether the default typoscript template was included
-		if (!$this->conf['collectionView.']){
+		if (!$this->conf['singleView.']){
 		    return $this->pi_wrapInBaseClass("please include the template \"Gorillary gallery default configuration\" in your typoscript root template!");
 		}
 
@@ -143,8 +143,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 
 				$content .= $html;
 			}
-			$content = str_replace('|', $content, $this->conf['galleryView.']['wrap']);
-
+			$content = $cObj->stdWrap($content, $this->conf['galleryView.']);
 		} else {
 			$content = "no collections found!";
 		}
@@ -161,8 +160,8 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "uid=" . $collectionId . " AND parenttable='tt_content' AND deleted=0 AND hidden=0");
 
 		if (count($collections)) {
-			$cObjCollection = t3lib_div::makeInstance('tslib_cObj');
-			$cObjCollection->start($collections[0]);
+			$cObjStdWrap = t3lib_div::makeInstance('tslib_cObj');
+			$cObjStdWrap->start($collections[0]);
 			
 			$cObj = t3lib_div::makeInstance('tslib_cObj');
 			$images = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', 'deleted=0 AND hidden=0 AND collection=' . $collectionId);
@@ -171,7 +170,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 				$cObj->start($image);
 				$content .= $cObj->cObjGetSingle($this->conf['collectionView.']['thumbnail'], $this->conf['collectionView.']['thumbnail.']);
 			}
-			$content = $cObjCollection->stdWrap($content, $this->conf['collectionView.']);
+			$content = $cObjStdWrap->stdWrap($content, $this->conf['collectionView.']);
 
 		} else {
 			$content = "no collections found!";
@@ -204,10 +203,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		}
 
 
-		$content = str_replace('|', $content, $this->conf['singleView.']['wrap']);
-		//$content .= '<div class="tx_gorillary_overlay"></div>';
-		//$content .= '<div class="tx_gorillary_loader_container"><div class="tx_gorillary_loader"></div></div>';
-		//$content = '<div style="position: relative;">' . $content . '</div>';
+		$content = $cObj->stdWrap($content, $this->conf['singleView.']);
 		return $content;
 	}
 

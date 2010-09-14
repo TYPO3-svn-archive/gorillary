@@ -81,14 +81,18 @@ class tx_gorillary_feedimport_save_hook{
         $data = curl_exec($ch);
         curl_close($ch);
 		$xml = new SimpleXMLElement($data, LIBXML_NOCDATA);
-        $maxImages = 7;
+        $maxImages = 5;
+
 
         foreach($xml->channel[0]->item as $item){
             $mediaProperties = $item->children('http://search.yahoo.com/mrss/');
-            $imageUrl = $mediaProperties->attributes()->url;
-            $imageTitle = $mediaProperties->attributes()->title;
-            $fileName = $this->getFilenameFromUrl($imageUrl);
+			$mediaContent = $mediaProperties->content[0];
 
+            $imageUrl = $mediaContent->attributes()->url;
+            
+           
+			$fileName = $this->getFilenameFromUrl($imageUrl);
+			
             if(trim($fileName) && !isset($this->images[$fileName])){
                 $filepath = PATH_site.'uploads/tx_gorillary/'.$fileName;
                 $this->downloadFile($imageUrl,$filepath);

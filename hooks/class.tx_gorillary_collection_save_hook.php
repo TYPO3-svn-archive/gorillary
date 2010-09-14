@@ -32,7 +32,7 @@ class tx_gorillary_collection_save_hook{
 					$collectionUid = $id;
 					break;
 			}
-			
+
 			$rows = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "uid='$collectionUid' AND deleted=0");
 			$this->collection = $rows[0];
 			$this->images = $this->getImageRecordsOfCollection($this->collection);

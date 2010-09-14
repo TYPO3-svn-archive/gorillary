@@ -54,7 +54,7 @@ $TCA['tx_gorillary_feedimports'] = array (
 		),
 		'title' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_collections.title',
+			'label' => 'LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_feedimports.title',
 			'config' => array (
 				'type' => 'input',
 				'size' => '30',
@@ -64,7 +64,7 @@ $TCA['tx_gorillary_feedimports'] = array (
 		'image' => Array (
 			'exclude' => 1,
 			'l10n_mode' => $l10n_mode_image,
-			'label' => 'LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_collections.image',
+			'label' => 'LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_feedimports.image',
 			'config' => Array (
 				'type' => 'group',
 				'internal_type' => 'file',
@@ -78,9 +78,10 @@ $TCA['tx_gorillary_feedimports'] = array (
 				'minitems' => '0'
 			)
 		),
+
         'feed_url' => Array (
 			'exclude' => 0,
-			'label' => 'feed_url',
+			'label' => 'LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_feedimports.feed_url',
 			'config' => array (
 				'type' => 'input',
 				'size' => '30',
@@ -89,7 +90,7 @@ $TCA['tx_gorillary_feedimports'] = array (
 		),
         'image_records' => Array (
 			'exclude' => 1,
-			'label' => "LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_collections.images",
+			'label' => "LLL:EXT:gorillary/locallang_db.xml:tx_gorillary_feedimports.images",
 			'config' => Array (
 				'type' => "inline",
 				'foreign_table' => 'tx_gorillary_images',
@@ -101,10 +102,10 @@ $TCA['tx_gorillary_feedimports'] = array (
 					'showRemovedLocalizationRecords' => 1,
 					'enabledControls' => array(
 						'new' => 0,
-						'delete' => 0,
-						'sort' => 0,
-						'hide' => 0,
-						'dragdrop' => 0,
+						'delete' => 1,
+						'sort' => 1,
+						'hide' => 1,
+						'dragdrop' => 1,
 					),
 					'levelLinksPosition' => 'none',
 				),
@@ -115,7 +116,7 @@ $TCA['tx_gorillary_feedimports'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'title;;;;2-2-2, feed_url, images, image_records;;;;3-3-3')
+		'0' => array('showitem' => 'title;;;;2-2-2, feed_url, image, images, image_records;;;;3-3-3')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')

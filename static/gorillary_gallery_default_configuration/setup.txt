@@ -1,6 +1,7 @@
 # one gallery has several collections
 # one collection has several images
 
+plugin.tx_gorillary_pi1.galleryView = stdWrap
 plugin.tx_gorillary_pi1.galleryView.wrap = <ul class="tx_gorillary_gallery">|</ul>
 plugin.tx_gorillary_pi1.galleryView.thumbnail = IMAGE
 plugin.tx_gorillary_pi1.galleryView.thumbnail{
@@ -17,6 +18,7 @@ plugin.tx_gorillary_pi1.galleryView.thumbnail{
   imageLinkWrap.typolink.useCacheHash = 1
 }
 
+plugin.tx_gorillary_pi1.collectionView = stdWrap
 plugin.tx_gorillary_pi1.collectionView.wrap = <ul class="tx_gorillary_collection">|</ul>
 plugin.tx_gorillary_pi1.collectionView.thumbnail = IMAGE
 plugin.tx_gorillary_pi1.collectionView.thumbnail{
@@ -33,7 +35,7 @@ plugin.tx_gorillary_pi1.collectionView.thumbnail{
   imageLinkWrap.typolink.useCacheHash = 1
 }
 
-
+plugin.tx_gorillary_pi1.singleView = stdWrap
 plugin.tx_gorillary_pi1.singleView.wrap = <div class="tx_gorillary_image">|</ul>
 plugin.tx_gorillary_pi1.singleView.thumbnail = IMAGE
 plugin.tx_gorillary_pi1.singleView.thumbnail{
@@ -52,7 +54,9 @@ plugin.tx_gorillary_pi1.additionalHeaderData{
 	5 = <link rel="stylesheet" type="text/css" href="typo3conf/ext/gorillary/css/gorillary.css" />
 }
 
-plugin.tx_gorillary_pi2 < plugin.tx_gorillary_pi1
+
 plugin.tx_gorillary_pi2.includeLibs = typo3conf/ext/gorillary/pi2/class.tx_gorillary_pi2.php
 plugin.tx_gorillary_pi2.userFunc = tx_gorillary_pi2->main
-
+plugin.tx_gorillary_pi2.galleryView < plugin.tx_gorillary_pi1.galleryView
+plugin.tx_gorillary_pi2.collectionView < plugin.tx_gorillary_pi1.collectionView
+plugin.tx_gorillary_pi2.singleView < plugin.tx_gorillary_pi1.singleView
