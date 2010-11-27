@@ -153,9 +153,11 @@ $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi2']='la
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi2']='tx_gorillary_feedimports';
 
 
-t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_gallery_default_configuration/', 'Gorillary gallery default configuration');
-t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_gallery_jquery/', 'Gorillary gallery jquery ajaxification');
-t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_direct_link_to_image/', 'Gorillary gallery direct image link');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_gallery_default_configuration/', 'Gorillary base configuration');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_jquery/', 'Gorillary jQuery');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_jquery_cycle/', 'Gorillary jQuery Cycle');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_jquery_galleriffic/', 'Gorillary jQuery Galleriffic');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_direct_link_to_image/', 'Gorillary direct image link');
 
 if (TYPO3_MODE == 'BE') {
     $TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_gorillary_pi1_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_gorillary_pi1_wizicon.php';
