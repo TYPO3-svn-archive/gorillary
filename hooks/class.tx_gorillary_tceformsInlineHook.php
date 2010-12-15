@@ -1,6 +1,6 @@
 <?php
 //require_once($GLOBALS['_SERVER']['DOCUMENT_ROOT'].'/t3lib/interfaces/interface.t3lib_tceformsinlinehook.php');
-require_once('../t3lib/interfaces/interface.t3lib_tceformsinlinehook.php');
+require_once(PATH_t3lib.'/interfaces/interface.t3lib_tceformsinlinehook.php');
 
 class tx_gorillary_tceformsInlineHook implements t3lib_tceformsInlineHook{
 	

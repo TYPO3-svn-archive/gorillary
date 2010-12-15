@@ -39,7 +39,7 @@ plugin.tx_gorillary_pi1.collectionView.wrap (
 	</div>
 )
 
-plugin.tx_gorillary_pi1.additionalHeaderData.10 = <script type="text/javascript" src="typo3conf/ext/gorillary/js/gorillary.jquery.galleriffic.js"></script>
-plugin.tx_gorillary_pi1.additionalHeaderData.20 = <script type="text/javascript" src="typo3conf/ext/gorillary/js/galleriffic-2.0/js/jquery.galleriffic.js"></script>
-plugin.tx_gorillary_pi1.additionalHeaderData.30 = <script type="text/javascript" src="typo3conf/ext/gorillary/js/galleriffic-2.0/js/jquery.history.js"></script>
-plugin.tx_gorillary_pi1.additionalHeaderData.40 = <script type="text/javascript" src="typo3conf/ext/gorillary/js/galleriffic-2.0/js/jquery.opacityrollover.js"></script>
+plugin.tx_gorillary_pi1.collectionView.additionalHeaderData.10 = <script type="text/javascript" src="typo3conf/ext/gorillary/js/gorillary.jquery.galleriffic.js"></script>
+plugin.tx_gorillary_pi1.collectionView.additionalHeaderData.20 = <script type="text/javascript" src="typo3conf/ext/gorillary/js/galleriffic-2.0/js/jquery.galleriffic.js"></script>
+plugin.tx_gorillary_pi1.collectionView.additionalHeaderData.30 = <script type="text/javascript" src="typo3conf/ext/gorillary/js/galleriffic-2.0/js/jquery.history.js"></script>
+plugin.tx_gorillary_pi1.collectionView.additionalHeaderData.40 = <script type="text/javascript" src="typo3conf/ext/gorillary/js/galleriffic-2.0/js/jquery.opacityrollover.js"></script>

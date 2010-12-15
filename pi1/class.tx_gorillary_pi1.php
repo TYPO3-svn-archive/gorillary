@@ -136,13 +136,25 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "parentid=" . $contentId . " AND parenttable='tt_content' AND deleted=0 AND hidden=0");
 
 		if (count($collections) > 1) {
+
+			// include the additional files into the header (e.g. some js files)
+			foreach ($this->conf['galleryView.']['additionalHeaderData.'] as $value) {
+			    $this->tsfe->additionalHeaderData[$this->prefixId] .= $value;
+			}
 			$cObj = t3lib_div::makeInstance('tslib_cObj');
 
 			foreach ($collections as $collection) {
+				// if there is no collection overview image set
+				if(!$collection['image']){ // use the first image of the collection
+					$images = explode(",",$collection['images']);
+					$collection['image'] = $images[0];
+				}
 				$cObj->start($collection);
 				$html = $cObj->cObjGetSingle($this->conf['galleryView.']['thumbnail'], $this->conf['galleryView.']['thumbnail.']);
 				$content .= $html;
+				
 			}
+					
 			$content = $cObj->stdWrap($content, $this->conf['galleryView.']);
 		} else if(count($collections) == 1){
 			$content = $this->getCollectionView($collections[0]['uid']);
@@ -162,6 +174,10 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		$content = "";
 		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "uid=" . $collectionId . " AND parenttable='tt_content' AND deleted=0 AND hidden=0");
 
+		// include the additional files into the header (e.g. some js files)
+		foreach ($this->conf['collectionView.']['additionalHeaderData.'] as $value) {
+		    $this->tsfe->additionalHeaderData[$this->prefixId] .= $value;
+		}
 		if (count($collections)) {
 			$collection = $collections[0];
 			$cObjStdWrap = t3lib_div::makeInstance('tslib_cObj');
@@ -169,7 +185,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 
 			$cObj = t3lib_div::makeInstance('tslib_cObj');
 
-			$images = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', 'deleted=0 AND hidden=0 AND collection=' . $collectionId);
+			$images = $this->getImagesByCollectionId($collectionId);
 			$filenames = explode(',', $collection['images']);
 			$imageIndex = array();
 			foreach($images as $image){
@@ -203,6 +219,11 @@ class tx_gorillary_pi1 extends tslib_pibase {
 
 		$content = "";
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		
+		// include the additional files into the header (e.g. some js files)
+		foreach ($this->conf['singleView.']['additionalHeaderData.'] as $value) {
+		    $this->tsfe->additionalHeaderData[$this->prefixId] .= $value;
+		}
 		if ($imageId) {
 			$images = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', 'deleted=0 AND hidden=0 AND uid=' . $imageId);
 		}
@@ -218,6 +239,11 @@ class tx_gorillary_pi1 extends tslib_pibase {
 
 		$content = $cObj->stdWrap($content, $this->conf['singleView.']);
 		return $content;
+	}
+	
+	private function getImagesByCollectionId($collectionId){
+		$images = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', 'deleted=0 AND hidden=0 AND collection=' . $collectionId);
+		return $images;
 	}
 
 
