@@ -107,8 +107,9 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		}
 
 		// include the additional files into the header (e.g. some js files)
+		$this->tsfe->additionalHeaderData[$this->prefixId] = '';
 		foreach ($this->conf['additionalHeaderData.'] as $value) {
-		    $this->tsfe->additionalHeaderData[$this->prefixId] .= $value;
+		    $this->tsfe->additionalHeaderData[$this->prefixId] .= $value."\n";
 		}
 
 		// check whether we have GET params here
@@ -139,7 +140,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 
 			// include the additional files into the header (e.g. some js files)
 			foreach ($this->conf['galleryView.']['additionalHeaderData.'] as $value) {
-			    $this->tsfe->additionalHeaderData[$this->prefixId] .= $value;
+			    $this->tsfe->additionalHeaderData[$this->prefixId] .= $value."\n";
 			}
 			$cObj = t3lib_div::makeInstance('tslib_cObj');
 
@@ -176,7 +177,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 
 		// include the additional files into the header (e.g. some js files)
 		foreach ($this->conf['collectionView.']['additionalHeaderData.'] as $value) {
-		    $this->tsfe->additionalHeaderData[$this->prefixId] .= $value;
+		    $this->tsfe->additionalHeaderData[$this->prefixId] .= $value."\n";
 		}
 		if (count($collections)) {
 			$collection = $collections[0];
@@ -222,7 +223,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 		
 		// include the additional files into the header (e.g. some js files)
 		foreach ($this->conf['singleView.']['additionalHeaderData.'] as $value) {
-		    $this->tsfe->additionalHeaderData[$this->prefixId] .= $value;
+		    $this->tsfe->additionalHeaderData[$this->prefixId] .= $value."\n";
 		}
 		if ($imageId) {
 			$images = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_images', 'deleted=0 AND hidden=0 AND uid=' . $imageId);
