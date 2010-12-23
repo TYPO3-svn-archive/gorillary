@@ -1,3 +1,4 @@
 $(document).ready(function(){
-	$("a[rel='example3']").colorbox({transition:"fade", width:"75%", height:"75%"});
-)};
+			//Examples of how to assign the ColorBox event to elements
+			$(".tx_gorillary_collection a[rel='colorbox']").colorbox({transition:"fade"});	
+		});

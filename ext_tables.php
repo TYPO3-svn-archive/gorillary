@@ -157,6 +157,7 @@ t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_gallery_default_configura
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_jquery/', 'Gorillary jQuery');
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_jquery_cycle/', 'Gorillary jQuery Cycle');
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_jquery_galleriffic/', 'Gorillary jQuery Galleriffic');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_jquery_colorbox/', 'Gorillary jQuery Collorbox');
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/gorillary_direct_link_to_image/', 'Gorillary direct image link');
 
 if (TYPO3_MODE == 'BE') {
