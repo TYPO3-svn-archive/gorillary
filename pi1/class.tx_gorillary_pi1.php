@@ -134,7 +134,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 	 */
 	protected function getGalleryView($contentId) {
 		$content = "";
-		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "parentid=" . $contentId . " AND parenttable='tt_content' AND deleted=0 AND hidden=0");
+		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "parentid=" . $contentId . " AND deleted=0 AND hidden=0", '', 'sorting');
 
 		if (count($collections) > 1) {
 
@@ -173,7 +173,7 @@ class tx_gorillary_pi1 extends tslib_pibase {
 	 */
 	protected function getCollectionView($collectionId) {
 		$content = "";
-		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "uid=" . $collectionId . " AND parenttable='tt_content' AND deleted=0 AND hidden=0");
+		$collections = $this->db->exec_SELECTgetRows('*', 'tx_gorillary_collections', "uid=" . $collectionId . " AND deleted=0 AND hidden=0");
 
 		// include the additional files into the header (e.g. some js files)
 		foreach ($this->conf['collectionView.']['additionalHeaderData.'] as $value) {
